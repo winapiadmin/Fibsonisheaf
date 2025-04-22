@@ -70,6 +70,7 @@ char* mpz_to_scientific_str(const mpz_t n, size_t precision) {
     free(num_str);
     return result;
 }
+<<<<<<< HEAD
 double exec(void(p)(int, mpz_t), int i, mpz_t r) {
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
@@ -78,6 +79,14 @@ double exec(void(p)(int, mpz_t), int i, mpz_t r) {
     return (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
 }
 
+=======
+
+clock_t exec(void(p)(int, mpz_t), int i, mpz_t r) {
+    clock_t start = clock();
+    p(i, r);
+    return clock() - start;
+}
+>>>>>>> 224ae6b39555af3ec89c4b09a5ff1328c1fbb508
 void report(unsigned int index, clock_t t, mpz_t r) {
     double elapsed = (double)t / CLOCKS_PER_SEC;
     BenchmarkResult *result = malloc(sizeof(BenchmarkResult));
@@ -112,6 +121,7 @@ void matrix_v1(int, mpz_t);
 void matrix_v2(int, mpz_t);
 void binet(int, mpz_t);
 void gmp(int, mpz_t);
+<<<<<<< HEAD
 void bs(void(p)(int, mpz_t)) {
     mpz_t r;
     mpz_init(r);
@@ -141,12 +151,16 @@ void bs(void(p)(int, mpz_t)) {
     mpz_clear(r);
 }
 void bench(void(p)(int, mpz_t), char* outfile) {
+=======
+int bench(void(p)(int, mpz_t), char* outfile) {
+>>>>>>> 224ae6b39555af3ec89c4b09a5ff1328c1fbb508
     mpz_t r;
     mpz_init(r);
     #ifdef REPORT
         flog = fopen(outfile, "w");
         if (!flog) {
             perror("Failed to open log file");
+<<<<<<< HEAD
             return;
         }
     #endif
@@ -164,6 +178,20 @@ void bench(void(p)(int, mpz_t), char* outfile) {
             if (t >= 1.0){
                 char* result_str = mpz_to_scientific_str(r, 4);
                 fprintf(stdout, "%10u | %8.5fs | %s\n",i, t, result_str);
+=======
+            return 1;
+        }
+    #endif
+    if (p==naive){
+        unsigned int i = 1;
+        clock_t t = 0;
+        while (1) {
+            t = exec(p, i, r);
+            report(i, t, r);
+            if ((double)t / CLOCKS_PER_SEC >= 1.0){
+                char* result_str = mpz_to_scientific_str(r, 4);
+                fprintf(stdout, "%10u | %8.5fs | %s\n",i, (double)t/CLOCKS_PER_SEC, result_str);
+>>>>>>> 224ae6b39555af3ec89c4b09a5ff1328c1fbb508
                 free(result_str);
                 break;
             }
@@ -173,6 +201,7 @@ void bench(void(p)(int, mpz_t), char* outfile) {
             fclose(flog);
         #endif
     }
+<<<<<<< HEAD
     #ifndef REPORT
     else{
 		bs(p);
@@ -187,6 +216,40 @@ void bench(void(p)(int, mpz_t), char* outfile) {
 #endif
 void print_header(const char* title) {
     fprintf(stderr, "Benchmarking with %s algorithm: (REPORT is%s defined)\n", title, DREPORT?"":"n't");
+=======
+    else{
+        // Binary search for maximum `i` such that exec time < 1s
+        unsigned int low = 1, high = 1;
+        clock_t t;
+        // Find upper bound where time exceeds 1s
+        do {
+            high *= 2;
+            t = exec(p, high, r);
+        } while ((double)t / CLOCKS_PER_SEC < 1.0);
+
+        while (low < high) {
+            unsigned int mid = (low + high) / 2;
+            t = exec(p, mid, r);
+            if ((double)t / CLOCKS_PER_SEC < 1.0)
+                low = mid + 1;
+            else
+                high = mid;
+        }
+
+        unsigned int final = low - 1;
+        t = exec(p, final, r);
+        char* result_str = mpz_to_scientific_str(r, 4);
+        fprintf(stdout, "%10u | %8.5fs | %s\n",final, (double)t/CLOCKS_PER_SEC, result_str);
+        free(result_str);
+    }
+
+    mpz_clear(r);
+    return 0;
+}
+
+void print_header(const char* title) {
+    fprintf(stderr, "Benchmarking with %s algorithm:\n", title);
+>>>>>>> 224ae6b39555af3ec89c4b09a5ff1328c1fbb508
     fprintf(stderr, "   n       |   time    | result (scientific)\n");
     fprintf(stderr, "-----------|-----------|---------------------\n");
 }

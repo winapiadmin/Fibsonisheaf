@@ -28,7 +28,10 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 # Link GMP
 target_link_libraries(${PROJECT_NAME} gmp)
 
+<<<<<<< HEAD
 add_compile_options(-march=native -mtune=native -pipe -flto -O3 -funroll-loops)
+=======
+>>>>>>> 224ae6b39555af3ec89c4b09a5ff1328c1fbb508
 # Preprocessor definitions for optional flags
 if (DEBUG)
     target_compile_definitions(${PROJECT_NAME} PRIVATE DEBUG)
