@@ -1,12 +1,8 @@
 gmp-*
 build/*
+# Ignore everything else in the plotting folder
+plotting/*
+# Allow specific files in plotting to be tracked
 !plotting/requirements.txt
 !plotting/createjson.py
 !plotting/anim.py
-plotting/*
-plotting/*.dat
-plotting/*.json
-plotting/*.md
-plotting/*.mp4
-plotting/*.png
-plotting/*.pyc
