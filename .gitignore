@@ -1,0 +1,12 @@
+gmp-*
+build/*
+!plotting/requirements.txt
+!plotting/createjson.py
+!plotting/anim.py
+plotting/*
+plotting/*.dat
+plotting/*.json
+plotting/*.md
+plotting/*.mp4
+plotting/*.png
+plotting/*.pyc
