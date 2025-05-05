@@ -1,6 +1,23 @@
-#include "test.h"
+#include <gmp.h>
 #include <stdlib.h>  // For malloc
-void matrix_mult(mpz_t result[2][2], mpz_t A[2][2], mpz_t B[2][2]);
+void matrix_mult(mpz_t result[2][2], mpz_t A[2][2], mpz_t B[2][2]) {
+    mpz_t temp;
+    mpz_init(temp);
+
+    // Perform matrix multiplication directly on the result matrix
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            mpz_set_ui(result[i][j], 0);  // Initialize the result matrix element
+            for (int k = 0; k < 2; k++) {
+                mpz_mul(temp, A[i][k], B[k][j]);
+                mpz_add(result[i][j], result[i][j], temp);
+            }
+        }
+    }
+
+    mpz_clear(temp);
+}
+const char* ALG="matrix_v2";
 
 // Helper to copy matrices
 void matrix_copy(mpz_t dest[2][2], mpz_t src[2][2]) {
@@ -44,7 +61,7 @@ void matrix_pow(mpz_t result[2][2], mpz_t base[2][2], int power) {
 }
 
 // Compute the n-th Fibonacci number using matrix exponentiation
-void matrix_v2(int n, mpz_t result) {
+void fibonacci(int n, mpz_t result) {
     if (n == 0) {
         mpz_set_ui(result, 0);
         return;

@@ -1,6 +1,7 @@
-#include "test.h"
+#include <gmp.h>
 
-void iterative(int n, mpz_t result) {
+const char* ALG="iterative";
+void fibonacci(int n, mpz_t result) {
     if (n == 0) {
         mpz_set_ui(result, 0);
         return;
@@ -11,8 +12,8 @@ void iterative(int n, mpz_t result) {
 
     // Initialize Fibonacci state
     mpz_t a, b, temp;
-    mpz_init_set_ui(a, BASE0);  // F(0)
-    mpz_init_set_ui(b, BASE1);  // F(1)
+    mpz_init_set_ui(a, 0);  // F(0)
+    mpz_init_set_ui(b, 1);  // F(1)
     mpz_init(temp);
 
     // Compute up to F(n)

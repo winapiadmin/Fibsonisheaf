@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "test.h": "c"
+        "test.h": "c",
+        "gmp.h": "c",
+        "memory": "c",
+        "format": "c",
+        "istream": "c",
+        "functional": "c"
     }
 }
